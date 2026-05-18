@@ -45,7 +45,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1 lg:col-span-2">
             <span className="text-2xl font-black tracking-widest text-black dark:text-white" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
             <p className="mt-4 text-xs leading-relaxed max-w-sm font-light text-neutral-500 dark:text-neutral-400">
-              Apple/Nike-inspired premium sunglasses. Crafted with ultra-lightweight frames, polarized TAC lenses, and certified UV400 protection.
+              Premium sunglasses. Crafted with ultra-lightweight frames, polarized TAC lenses, and certified UV400 protection.
             </p>
             <div className="flex items-center gap-3 mt-6">
               {[FaInstagram, FaTwitter, FaFacebookF, FaYoutube].map((Icon, i) => (

@@ -26,8 +26,17 @@ const sanitizeEmptyStrings = (obj) => {
 // ─── PUBLIC ENDPOINTS ───
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 12, category, gender, frameShape, frameMaterial, polarized, minPrice, maxPrice, sort, search, brand, subcategory } = req.query;
-  const query = { isActive: true, isEnabled: true };
+  const { page = 1, limit = 12, category, gender, frameShape, frameMaterial, polarized, minPrice, maxPrice, sort, search, brand, subcategory, adminView } = req.query;
+  const query = { isActive: true };
+
+  // Only show disabled products to admins inside the dashboard list view (adminView === 'true')
+  const isAdmin = req.user && ['admin', 'superadmin'].includes(req.user.role);
+  if (adminView === 'true' && isAdmin) {
+    // Include both enabled and disabled products
+  } else {
+    // Storefront queries and guest visits must only return enabled products
+    query.isEnabled = true;
+  }
 
   if (category) {
     // Support slug-based category filter
@@ -69,8 +78,16 @@ exports.getProducts = asyncHandler(async (req, res) => {
 });
 
 exports.getProductBySlug = asyncHandler(async (req, res) => {
+  const query = { slug: req.params.slug, isActive: true };
+
+  // Only allow admins to preview disabled products
+  const isAdmin = req.user && ['admin', 'superadmin'].includes(req.user.role);
+  if (!isAdmin) {
+    query.isEnabled = true;
+  }
+
   const product = await Product.findOneAndUpdate(
-    { slug: req.params.slug, isActive: true },
+    query,
     { $inc: { viewCount: 1 } },
     { new: true }
   ).populate('category', 'name slug').populate('subcategory', 'name slug');
@@ -101,7 +118,9 @@ exports.getBestsellers = asyncHandler(async (req, res) => {
 exports.searchSuggestions = asyncHandler(async (req, res) => {
   const { q } = req.query;
   if (!q || q.length < 2) return res.json({ success: true, suggestions: [] });
-  const products = await Product.find({ isActive: true, name: { $regex: q, $options: 'i' } }).select('name slug thumbnail price brand').limit(6);
+  
+  // Only suggest enabled products
+  const products = await Product.find({ isActive: true, isEnabled: true, name: { $regex: q, $options: 'i' } }).select('name slug thumbnail price brand').limit(6);
   const categories = await Category.find({ isActive: true, name: { $regex: q, $options: 'i' } }).select('name slug').limit(3);
   res.json({ success: true, suggestions: { products, categories } });
 });
@@ -135,20 +154,27 @@ exports.toggleProduct = asyncHandler(async (req, res) => {
   res.json({ success: true, product, message: `Product ${product.isEnabled ? 'enabled' : 'disabled'}` });
 });
 
-// Upload images to Cloudinary
+// Upload images to Cloudinary or Local fallback
 exports.uploadImages = asyncHandler(async (req, res) => {
   if (!req.files || req.files.length === 0) throw new AppError('No images uploaded', 400);
-  const imageUrls = req.files.map((f) => f.path);
+  const imageUrls = req.files.map((f) => {
+    if (f.path.startsWith('http')) return f.path;
+    const filename = f.filename || require('path').basename(f.path);
+    return `http://localhost:7777/uploads/${filename}`;
+  });
   res.json({ success: true, images: imageUrls });
 });
 
-// Upload videos to Cloudinary
+// Upload videos to Cloudinary or Local fallback
 exports.uploadVideos = asyncHandler(async (req, res) => {
   if (!req.files || req.files.length === 0) throw new AppError('No videos uploaded', 400);
-  const videos = req.files.map((f) => ({
-    url: f.path,
-    thumbnail: getVideoThumbnail(f.filename),
-  }));
+  const videos = req.files.map((f) => {
+    const url = f.path.startsWith('http') ? f.path : `http://localhost:7777/uploads/${f.filename || require('path').basename(f.path)}`;
+    return {
+      url,
+      thumbnail: f.path.startsWith('http') ? getVideoThumbnail(f.filename) : url,
+    };
+  });
   res.json({ success: true, videos });
 });
 

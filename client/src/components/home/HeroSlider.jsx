@@ -34,7 +34,7 @@ export default function HeroSlider() {
   }, [banners]);
 
   if (loading) {
-    return <div className="w-full h-[60vh] md:h-screen shimmer flex items-center justify-center bg-neutral-100 dark:bg-neutral-900" />;
+    return <div className="w-full h-[50vh] md:h-screen shimmer flex items-center justify-center bg-neutral-100 dark:bg-neutral-900" />;
   }
 
   if (banners.length === 0) return null;
@@ -43,11 +43,11 @@ export default function HeroSlider() {
   const prevSlide = () => setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
 
   return (
-    <div className="relative w-full h-[70vh] md:h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-[50vh] md:h-screen overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         {banners[current] && (
           <motion.div key={banners[current]._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}
-            className="absolute inset-0 w-full h-full flex items-center">
+            className="absolute inset-0 w-full h-full flex items-end pb-12 sm:items-center sm:pb-0">
             
             {/* Media: Video or Image */}
             <div className="absolute inset-0 w-full h-full">
@@ -58,9 +58,9 @@ export default function HeroSlider() {
               ) : (
                 <>
                   {/* Desktop Image */}
-                  <img src={banners[current].desktopImage} alt={banners[current].title} className="hidden md:block w-full h-full object-cover opacity-70" />
+                  <img src={banners[current].desktopImage} alt={banners[current].title} className="hidden md:block w-full h-full object-cover opacity-60 md:opacity-70" />
                   {/* Mobile Image */}
-                  <img src={banners[current].mobileImage} alt={banners[current].title} className="block md:hidden w-full h-full object-cover opacity-70" />
+                  <img src={banners[current].mobileImage ? banners[current].mobileImage.replace('w=640', 'ar=9:16&fit=crop&w=640&h=1140') : ''} alt={banners[current].title} className="block md:hidden w-full h-full object-cover opacity-50" />
                 </>
               )}
               {/* Black Overlay Gradient */}
@@ -69,17 +69,17 @@ export default function HeroSlider() {
 
             {/* Text content - Apple inspired minimal white layout */}
             <div className="relative max-w-7xl mx-auto px-6 sm:px-12 w-full text-white z-10 select-none">
-              <div className="max-w-2xl">
+              <div className="max-w-[90%] sm:max-w-2xl">
                 <motion.h1 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }}
-                  className="text-4xl md:text-6xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Outfit' }}>
+                  className="text-xl sm:text-3xl md:text-6xl font-bold tracking-tight mb-2 sm:mb-4" style={{ fontFamily: 'Outfit' }}>
                   {banners[current].title}
                 </motion.h1>
                 <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-base md:text-xl text-neutral-300 mb-8 font-light max-w-lg leading-relaxed">
+                  className="text-[11px] sm:text-xs md:text-xl text-neutral-200 mb-4 sm:mb-8 font-light leading-relaxed">
                   {banners[current].subtitle}
                 </motion.p>
                 <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
-                  <Link href={banners[current].ctaLink} className="inline-block bg-white text-black font-semibold px-8 py-3.5 rounded-full text-sm uppercase tracking-wider transition-all duration-300 hover:bg-neutral-200 active:scale-95 shadow-md">
+                  <Link href={banners[current].ctaLink} className="inline-block bg-white text-black font-semibold px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-wider transition-all duration-300 hover:bg-neutral-200 active:scale-95 shadow-md">
                     {banners[current].ctaText}
                   </Link>
                 </motion.div>
@@ -92,15 +92,15 @@ export default function HeroSlider() {
       {/* Navigation Arrows */}
       {banners.length > 1 && (
         <>
-          <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/20 bg-black/30 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:bg-white/10" aria-label="Previous banner">
+          <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/20 bg-black/30 backdrop-blur-sm hidden md:flex items-center justify-center text-white transition-all hover:bg-white/10" aria-label="Previous banner">
             <HiOutlineChevronLeft size={20} />
           </button>
-          <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/20 bg-black/30 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:bg-white/10" aria-label="Next banner">
+          <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-white/20 bg-black/30 backdrop-blur-sm hidden md:flex items-center justify-center text-white transition-all hover:bg-white/10" aria-label="Next banner">
             <HiOutlineChevronRight size={20} />
           </button>
 
           {/* Dots Indicator */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          <div className="absolute bottom-4 md:left-1/2 md:-translate-x-1/2 right-6 md:right-auto z-20 flex gap-2">
             {banners.map((_, i) => (
               <button key={i} onClick={() => setCurrent(i)}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === current ? 'bg-white w-6' : 'bg-white/40'}`} />

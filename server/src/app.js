@@ -35,7 +35,7 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({ origin: config.clientUrl, credentials: true }));
 
 // Rate limiting
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, message: { success: false, message: 'Too many requests' } });
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: config.nodeEnv === 'development' ? 10000 : 200, message: { success: false, message: 'Too many requests' } });
 app.use('/api/', limiter);
 
 // Body parsing
@@ -81,3 +81,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+// Trigger nodemon reload for database config change

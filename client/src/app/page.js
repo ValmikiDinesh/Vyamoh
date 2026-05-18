@@ -11,19 +11,22 @@ export default function HomePage() {
   const [trending, setTrending] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestsellers, setBestsellers] = useState([]);
+  const [dbCategories, setDbCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [trendRes, newRes, bestRes] = await Promise.all([
+        const [trendRes, newRes, bestRes, catRes] = await Promise.all([
           api.get('/products?limit=8').catch(() => ({ data: { products: [] } })),
           api.get('/products/new-arrivals').catch(() => ({ data: { products: [] } })),
           api.get('/products/bestsellers').catch(() => ({ data: { products: [] } })),
+          api.get('/categories').catch(() => ({ data: { categories: [] } })),
         ]);
         setTrending(trendRes.data.products || []);
         setNewArrivals(newRes.data.products || []);
         setBestsellers(bestRes.data.products || []);
+        setDbCategories(catRes.data.categories || []);
       } catch {} finally {
         setLoading(false);
       }
@@ -31,7 +34,7 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  const categories = [
+  const staticCategories = [
     { name: 'Men', slug: 'men', img: 'https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=600&q=80' },
     { name: 'Women', slug: 'women', img: 'https://images.unsplash.com/photo-1582142407894-ec85a1260a46?auto=format&fit=crop&w=600&q=80' },
     { name: 'Unisex', slug: 'unisex', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80' },
@@ -39,6 +42,17 @@ export default function HomePage() {
     { name: 'Sports', slug: 'sports', img: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=600&q=80' },
     { name: 'Premium', slug: 'premium', img: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=600&q=80' }
   ];
+
+  const categories = dbCategories.length > 0
+    ? dbCategories.map(c => {
+        const staticMatch = staticCategories.find(sc => sc.slug === c.slug);
+        return {
+          name: c.name,
+          slug: c.slug,
+          img: c.image || staticMatch?.img || 'https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=600&q=80'
+        };
+      })
+    : staticCategories;
 
   const features = [
     { icon: HiOutlineSparkles, title: 'UV400 Protection', desc: 'Blocks 100% of harmful UVA and UVB radiation.' },

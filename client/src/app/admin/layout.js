@@ -2,13 +2,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart, HiOutlineUsers, HiOutlineTag, HiOutlineArrowLeft, HiOutlineMenu, HiOutlineX, HiOutlinePhotograph } from 'react-icons/hi';
+import { HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart, HiOutlineUsers, HiOutlineTag, HiOutlineArrowLeft, HiOutlineMenu, HiOutlineX, HiOutlinePhotograph, HiOutlineCollection } from 'react-icons/hi';
 import useAuthStore from '@/store/useAuthStore';
-
+ 
 const sidebarLinks = [
   { href: '/admin', icon: HiOutlineChartBar, label: 'Dashboard' },
   { href: '/admin/products', icon: HiOutlineCube, label: 'Products' },
   { href: '/admin/banners', icon: HiOutlinePhotograph, label: 'Banners' },
+  { href: '/admin/categories', icon: HiOutlineCollection, label: 'Categories' },
   { href: '/admin/orders', icon: HiOutlineShoppingCart, label: 'Orders' },
   { href: '/admin/users', icon: HiOutlineUsers, label: 'Users' },
   { href: '/admin/coupons', icon: HiOutlineTag, label: 'Coupons' },

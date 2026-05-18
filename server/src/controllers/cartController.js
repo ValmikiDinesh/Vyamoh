@@ -2,7 +2,7 @@ const { Cart, Product } = require('../models');
 const { asyncHandler, AppError } = require('../middleware/error');
 
 exports.getCart = asyncHandler(async (req, res) => {
-  let cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'name slug thumbnail isActive totalStock');
+  let cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'name slug thumbnail isActive isEnabled totalStock');
   if (!cart) cart = await Cart.create({ user: req.user._id, items: [] });
   res.json({ success: true, cart });
 });
@@ -10,7 +10,7 @@ exports.getCart = asyncHandler(async (req, res) => {
 exports.addToCart = asyncHandler(async (req, res) => {
   const { productId, variantId, quantity = 1 } = req.body;
   const product = await Product.findById(productId);
-  if (!product || !product.isActive) throw new AppError('Product not found', 404);
+  if (!product || !product.isActive || !product.isEnabled) throw new AppError('Product not found or unavailable', 404);
 
   let variant = null;
   let price = product.price;

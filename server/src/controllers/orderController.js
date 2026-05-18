@@ -29,7 +29,7 @@ exports.createOrder = asyncHandler(async (req, res) => {
   // Deduct inventory atomically
   for (const item of cart.items) {
     const product = await Product.findById(item.product);
-    if (!product) throw new AppError(`Product ${item.name} no longer available`, 400);
+    if (!product || !product.isEnabled) throw new AppError(`Product ${item.name} is no longer available`, 400);
     if (item.variant) {
       const variant = product.variants.id(item.variant);
       if (!variant || variant.stock < item.quantity) throw new AppError(`Insufficient stock for ${item.name}`, 400);

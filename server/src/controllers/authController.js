@@ -41,9 +41,10 @@ exports.getProfile = asyncHandler(async (req, res) => {
 });
 
 exports.updateProfile = asyncHandler(async (req, res) => {
-  const { name, phone } = req.body;
+  const { name, phone, password } = req.body;
   if (name) req.user.name = name;
   if (phone) req.user.phone = phone;
+  if (password) req.user.password = password;
   await req.user.save();
   res.json({ success: true, user: req.user });
 });

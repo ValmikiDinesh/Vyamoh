@@ -25,7 +25,7 @@ const getRecommendations = async (productId, userId, limit = 8) => {
 
     if (coPurchased.length > 0) {
       const ids = coPurchased.map((p) => p._id);
-      const products = await Product.find({ _id: { $in: ids }, isActive: true })
+      const products = await Product.find({ _id: { $in: ids }, isActive: true, isEnabled: true })
         .select('name slug thumbnail price compareAtPrice rating reviewCount brand specifications.gender specifications.frameShape isPolarized')
         .limit(limit);
       recommendations.push(...products);
@@ -42,6 +42,7 @@ const getRecommendations = async (productId, userId, limit = 8) => {
       _id: { $nin: existingIds },
       category: product.category,
       isActive: true,
+      isEnabled: true,
       'specifications.gender': product.specifications?.gender,
     })
       .select('name slug thumbnail price compareAtPrice rating reviewCount brand specifications.gender specifications.frameShape isPolarized')
@@ -57,6 +58,7 @@ const getRecommendations = async (productId, userId, limit = 8) => {
     const popular = await Product.find({
       _id: { $nin: existingIds },
       isActive: true,
+      isEnabled: true,
     })
       .select('name slug thumbnail price compareAtPrice rating reviewCount brand specifications.gender specifications.frameShape isPolarized')
       .sort({ purchaseCount: -1, viewCount: -1 })
@@ -84,7 +86,7 @@ const getPersonalizedRecommendations = async (userId, limit = 12) => {
 
   if (viewedProductIds.length === 0) {
     // Cold start — return trending products
-    return await Product.find({ isActive: true })
+    return await Product.find({ isActive: true, isEnabled: true })
       .select('name slug thumbnail price compareAtPrice rating reviewCount brand specifications.gender specifications.frameShape isPolarized')
       .sort({ purchaseCount: -1, viewCount: -1 })
       .limit(limit);
@@ -98,6 +100,7 @@ const getPersonalizedRecommendations = async (userId, limit = 12) => {
   return await Product.find({
     _id: { $nin: viewedProductIds },
     isActive: true,
+    isEnabled: true,
     $or: [
       { category: { $in: categories } },
       { 'specifications.gender': { $in: genders } },

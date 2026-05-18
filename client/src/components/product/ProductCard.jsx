@@ -96,7 +96,7 @@ export default function ProductCard({ product, index = 0 }) {
             </div>
 
             {/* Premium quick action buttons overlay on hover */}
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+            <div className="absolute bottom-4 left-4 right-4 hidden md:flex gap-2 transition-all duration-300 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
               <button onClick={handleAddToCart} className="flex-1 bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold uppercase tracking-wider py-3 shadow-md hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-1.5">
                 <HiOutlineShoppingBag size={14} /> Add To Cart
               </button>
@@ -127,6 +127,11 @@ export default function ProductCard({ product, index = 0 }) {
                 <span className="text-[11px] text-neutral-400 dark:text-neutral-500">({product.reviewCount})</span>
               </div>
             )}
+
+            {/* Mobile Touch Add to Cart Button - un-clutters the product image while providing perfect touch UX */}
+            <button onClick={handleAddToCart} className="w-full mt-3 bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold uppercase tracking-wider py-2.5 transition-all active:scale-95 flex items-center justify-center gap-1.5 md:hidden border border-black dark:border-white">
+              <HiOutlineShoppingBag size={13} /> Add To Cart
+            </button>
           </div>
         </Link>
       </div>

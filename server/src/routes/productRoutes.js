@@ -6,7 +6,7 @@ const multer = require('multer');
 const memoryUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
 // Public routes
-router.get('/', product.getProducts);
+router.get('/', optionalAuth, product.getProducts);
 router.get('/featured', product.getFeaturedProducts);
 router.get('/new-arrivals', product.getNewArrivals);
 router.get('/bestsellers', product.getBestsellers);

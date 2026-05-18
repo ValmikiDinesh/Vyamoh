@@ -52,7 +52,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await api.get('/products?limit=100');
+      const { data } = await api.get('/products?limit=100&adminView=true');
       setProducts(data.products || []);
     } catch {} finally { setLoading(false); }
   };
