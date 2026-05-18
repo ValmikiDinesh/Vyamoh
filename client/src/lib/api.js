@@ -22,7 +22,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && error.response?.data?.code === 'TOKEN_EXPIRED' && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const { data } = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || '/api';
+        const { data } = await axios.post(`${apiBase}/auth/refresh`, {}, { withCredentials: true });
         if (data.accessToken) {
           localStorage.setItem('accessToken', data.accessToken);
           originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
