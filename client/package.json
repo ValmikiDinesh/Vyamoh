@@ -1,0 +1,33 @@
+{
+  "name": "vyamoh-client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "framer-motion": "^11.5.4",
+    "gsap": "^3.15.0",
+    "js-cookie": "^3.0.5",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^15.0.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.6.0",
+    "recharts": "^2.12.7",
+    "swiper": "^12.1.4",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.15",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.12"
+  }
+}

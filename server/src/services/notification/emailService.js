@@ -1,0 +1,40 @@
+const nodemailer = require('nodemailer');
+const config = require('../../config');
+
+let transporter = null;
+
+const getTransporter = () => {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      host: config.smtp.host,
+      port: config.smtp.port,
+      secure: false,
+      auth: { user: config.smtp.user, pass: config.smtp.pass },
+    });
+  }
+  return transporter;
+};
+
+const sendEmail = async ({ to, subject, html, text }) => {
+  try {
+    const mail = getTransporter();
+    await mail.sendMail({ from: `"Vyamoh" <${config.smtp.user}>`, to, subject, html, text });
+    return true;
+  } catch (error) {
+    console.error('Email send error:', error.message);
+    return false;
+  }
+};
+
+const sendOrderConfirmation = async (order, user) => {
+  const items = order.items.map((i) => `<tr><td>${i.name}</td><td>${i.quantity}</td><td>₹${(i.price*i.quantity/100).toLocaleString('en-IN')}</td></tr>`).join('');
+  const html = `<div style="font-family:Arial;max-width:600px;margin:0 auto;padding:20px;"><h1>🛍️ Order Confirmed!</h1><p>Hi ${user.name},</p><p>Order <strong>${order.orderNumber}</strong> placed successfully.</p><table style="width:100%;border-collapse:collapse;margin:20px 0;"><thead><tr style="background:#f5f5f5;"><th style="padding:10px;text-align:left;">Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>${items}</tbody></table><p><strong>Total: ₹${(order.totalAmount/100).toLocaleString('en-IN')}</strong></p><p>Track at <a href="${config.clientUrl}/account/orders/${order._id}">Vyamoh</a></p></div>`;
+  return sendEmail({ to: user.email, subject: `Order Confirmed: ${order.orderNumber}`, html });
+};
+
+const sendShippingNotification = async (order, user) => {
+  const html = `<div style="font-family:Arial;max-width:600px;margin:0 auto;padding:20px;"><h1>📦 Your Order is Shipped!</h1><p>Hi ${user.name}, Order <strong>${order.orderNumber}</strong> shipped.</p>${order.trackingId ? `<p>Tracking: <strong>${order.trackingId}</strong></p>` : ''}</div>`;
+  return sendEmail({ to: user.email, subject: `Order Shipped: ${order.orderNumber}`, html });
+};
+
+module.exports = { sendEmail, sendOrderConfirmation, sendShippingNotification };
