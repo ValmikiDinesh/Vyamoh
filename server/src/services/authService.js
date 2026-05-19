@@ -111,9 +111,9 @@ const refreshToken = async (token) => {
     throw new AppError('Invalid refresh token', 401);
   }
 
-  const tokens = generateTokens(user._id);
-  user.refreshToken = tokens.refreshToken;
-  await user.save();
+  // Reuse the existing valid refresh token to prevent multi-tab race conditions
+  const accessToken = jwt.sign({ id: user._id }, config.jwt.secret, { expiresIn: config.jwt.expire });
+  const tokens = { accessToken, refreshToken: token };
 
   return { user, tokens };
 };
