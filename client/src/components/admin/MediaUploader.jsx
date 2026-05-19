@@ -50,8 +50,17 @@ export default function MediaUploader({ images = [], videos = [], onImagesChange
   const imgDropzone = useDropzone({ onDrop: onDropImages, accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] }, maxFiles: 10 });
   const vidDropzone = useDropzone({ onDrop: onDropVideos, accept: { 'video/*': ['.mp4', '.mov', '.webm'] }, maxFiles: 5 });
 
-  const removeImage = (idx) => onImagesChange(images.filter((_, i) => i !== idx));
-  const removeVideo = (idx) => onVideosChange(videos.filter((_, i) => i !== idx));
+  const removeImage = (e, idx) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onImagesChange(images.filter((_, i) => i !== idx));
+  };
+
+  const removeVideo = (e, idx) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onVideosChange(videos.filter((_, i) => i !== idx));
+  };
 
   return (
     <div className="space-y-4">
@@ -73,7 +82,7 @@ export default function MediaUploader({ images = [], videos = [], onImagesChange
             {images.map((img, i) => (
               <div key={i} className="relative aspect-square rounded-lg overflow-hidden group" style={{ border: '1px solid var(--border-color)' }}>
                 <img src={img} alt="" className="w-full h-full object-cover" />
-                <button onClick={() => removeImage(i)}
+                <button type="button" onClick={(e) => removeImage(e, i)}
                   className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: 'rgba(239,68,68,0.9)', color: '#fff' }}>
                   <HiOutlineX size={14} />
@@ -103,7 +112,7 @@ export default function MediaUploader({ images = [], videos = [], onImagesChange
             {videos.map((vid, i) => (
               <div key={i} className="relative rounded-lg overflow-hidden group" style={{ border: '1px solid var(--border-color)' }}>
                 <video src={vid} className="w-full aspect-video object-cover" muted />
-                <button onClick={() => removeVideo(i)}
+                <button type="button" onClick={(e) => removeVideo(e, i)}
                   className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ background: 'rgba(239,68,68,0.9)', color: '#fff' }}>
                   <HiOutlineX size={14} />
