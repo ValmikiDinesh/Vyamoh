@@ -23,6 +23,48 @@ const updateProductRatingStats = async (productId) => {
   }
 };
 
+// Get all reviews (Admin only)
+router.get('/admin/all', authenticate, asyncHandler(async (req, res) => {
+  const isAdmin = req.user.role === 'admin' || req.user.role === 'superadmin';
+  if (!isAdmin) throw new AppError('Unauthorized', 403);
+
+  const { page = 1, limit = 20, rating, search } = req.query;
+  const query = {};
+
+  if (rating) query.rating = parseInt(rating);
+
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { text: { $regex: search, $options: 'i' } },
+      { reviewerName: { $regex: search, $options: 'i' } }
+    ];
+  }
+
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  const [reviews, total] = await Promise.all([
+    Review.find(query)
+      .populate('user', 'name email avatar')
+      .populate('product', 'name slug thumbnail')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit)),
+    Review.countDocuments(query),
+  ]);
+
+  res.json({
+    success: true,
+    reviews,
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total,
+      pages: Math.ceil(total / parseInt(limit))
+    }
+  });
+}));
+
 // Get reviews for a product
 router.get('/product/:productId', asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -38,9 +80,9 @@ router.get('/product/:productId', asyncHandler(async (req, res) => {
   res.json({ success: true, reviews, pagination: { page: parseInt(page), limit: parseInt(limit), total, pages: Math.ceil(total / parseInt(limit)) } });
 }));
 
-// Create a review
+// Create a review (Allows fake name and media uploads for admins)
 router.post('/product/:productId', authenticate, asyncHandler(async (req, res) => {
-  const { rating, title, text } = req.body;
+  const { rating, title, text, reviewerName, images, videos } = req.body;
   const productId = req.params.productId;
   const isAdmin = req.user.role === 'admin' || req.user.role === 'superadmin';
 
@@ -61,9 +103,12 @@ router.post('/product/:productId', authenticate, asyncHandler(async (req, res) =
   const review = await Review.create({
     product: productId,
     user: req.user._id,
+    reviewerName: isAdmin ? reviewerName : undefined, // Only admin can specify custom reviewer name
     rating,
     title,
     text,
+    images: images || [],
+    videos: videos || [],
     isVerifiedPurchase,
   });
 
@@ -74,7 +119,7 @@ router.post('/product/:productId', authenticate, asyncHandler(async (req, res) =
 
 // Edit a review
 router.put('/:reviewId', authenticate, asyncHandler(async (req, res) => {
-  const { rating, title, text } = req.body;
+  const { rating, title, text, reviewerName, images, videos } = req.body;
   const review = await Review.findById(req.params.reviewId);
   if (!review) throw new AppError('Review not found', 404);
 
@@ -88,6 +133,9 @@ router.put('/:reviewId', authenticate, asyncHandler(async (req, res) => {
   if (rating) review.rating = rating;
   if (title !== undefined) review.title = title;
   if (text) review.text = text;
+  if (isAdmin && reviewerName !== undefined) review.reviewerName = reviewerName;
+  if (images !== undefined) review.images = images;
+  if (videos !== undefined) review.videos = videos;
 
   await review.save();
   await updateProductRatingStats(review.product);

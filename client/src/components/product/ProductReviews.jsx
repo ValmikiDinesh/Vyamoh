@@ -343,14 +343,14 @@ export default function ProductReviews({ productId, onReviewChanged }) {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center font-bold text-sm uppercase text-neutral-600 dark:text-neutral-300">
                         {rev.user?.avatar ? (
-                          <img src={rev.user.avatar} alt={rev.user.name} className="w-full h-full rounded-full object-cover" />
+                          <img src={rev.user.avatar} alt="" className="w-full h-full rounded-full object-cover" />
                         ) : (
-                          rev.user?.name?.charAt(0) || 'U'
+                          (rev.reviewerName || rev.user?.name || 'Customer').charAt(0)
                         )}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold">{rev.user?.name || 'Customer'}</span>
+                          <span className="text-sm font-semibold">{rev.reviewerName || rev.user?.name || 'Customer'}</span>
                           {rev.isVerifiedPurchase && (
                             <span className="inline-flex items-center gap-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full">
                               <HiCheck size={10} /> Verified Buyer
@@ -401,6 +401,20 @@ export default function ProductReviews({ productId, onReviewChanged }) {
                   <p className="text-sm text-neutral-650 dark:text-neutral-350 leading-relaxed font-light">
                     {rev.text}
                   </p>
+
+                  {/* Attached Photos and Videos */}
+                  {((rev.images?.length || 0) + (rev.videos?.length || 0)) > 0 && (
+                    <div className="flex gap-2 flex-wrap mt-4 select-none">
+                      {rev.images?.map((img, i) => (
+                        <a key={i} href={img} target="_blank" rel="noopener noreferrer" className="relative w-20 h-20 overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:scale-95 transition-transform rounded-md">
+                          <img src={img} alt="" className="w-full h-full object-cover" />
+                        </a>
+                      ))}
+                      {rev.videos?.map((vid, i) => (
+                        <video key={i} src={vid} controls className="w-36 h-20 object-cover border border-neutral-200 dark:border-neutral-800 hover:scale-95 transition-transform rounded-md" />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

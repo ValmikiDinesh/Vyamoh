@@ -5,6 +5,12 @@ const connectDB = async () => {
   try {
     const conn = await mongoose.connect(config.mongoUri);
     console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    try {
+      await conn.connection.db.collection('reviews').dropIndex('user_1_product_1');
+    } catch (e) {}
+    try {
+      await conn.connection.db.collection('reviews').dropIndex('product_1_user_1');
+    } catch (e) {}
   } catch (error) {
     console.error(`❌ MongoDB connection error: ${error.message}`);
     process.exit(1);

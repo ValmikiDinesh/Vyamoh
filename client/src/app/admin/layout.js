@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart, HiOutlineUsers, HiOutlineTag, HiOutlineArrowLeft, HiOutlineMenu, HiOutlineX, HiOutlinePhotograph, HiOutlineCollection } from 'react-icons/hi';
+import { HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart, HiOutlineUsers, HiOutlineTag, HiOutlineArrowLeft, HiOutlineMenu, HiOutlineX, HiOutlinePhotograph, HiOutlineCollection, HiOutlineChatAlt2 } from 'react-icons/hi';
 import useAuthStore from '@/store/useAuthStore';
  
 const sidebarLinks = [
@@ -13,6 +13,7 @@ const sidebarLinks = [
   { href: '/admin/orders', icon: HiOutlineShoppingCart, label: 'Orders' },
   { href: '/admin/users', icon: HiOutlineUsers, label: 'Users' },
   { href: '/admin/coupons', icon: HiOutlineTag, label: 'Coupons' },
+  { href: '/admin/reviews', icon: HiOutlineChatAlt2, label: 'Reviews' },
 ];
 
 export default function AdminLayout({ children }) {
