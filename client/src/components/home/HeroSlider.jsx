@@ -43,7 +43,7 @@ export default function HeroSlider() {
   const prevSlide = () => setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
 
   return (
-    <div className="relative w-full h-[50vh] md:h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-[50vh] md:h-screen overflow-hidden">
       <AnimatePresence mode="wait">
         {banners[current] && (
           <motion.div key={banners[current]._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}
@@ -52,15 +52,15 @@ export default function HeroSlider() {
             {/* Media: Video or Image */}
             <div className="absolute inset-0 w-full h-full">
               {banners[current].video ? (
-                <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+                <video autoPlay loop muted playsInline className="w-full h-full object-cover">
                   <source src={banners[current].video} type="video/mp4" />
                 </video>
               ) : (
                 <>
                   {/* Desktop Image */}
-                  <img src={banners[current].desktopImage} alt={banners[current].title} className="hidden md:block w-full h-full object-cover opacity-60 md:opacity-70" />
+                  <img src={banners[current].desktopImage} alt={banners[current].title} className="hidden md:block w-full h-full object-cover" />
                   {/* Mobile Image */}
-                  <img src={banners[current].mobileImage ? banners[current].mobileImage.replace('w=640', 'ar=9:16&fit=crop&w=640&h=1140') : ''} alt={banners[current].title} className="block md:hidden w-full h-full object-cover opacity-50" />
+                  <img src={banners[current].mobileImage ? banners[current].mobileImage.replace('w=640', 'ar=9:16&fit=crop&w=640&h=1140') : ''} alt={banners[current].title} className="block md:hidden w-full h-full object-cover" />
                 </>
               )}
             </div>
