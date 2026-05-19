@@ -13,7 +13,7 @@ exports.addToCart = asyncHandler(async (req, res) => {
   if (!product || !product.isActive || !product.isEnabled) throw new AppError('Product not found or unavailable', 404);
 
   let variant = null;
-  let price = product.price;
+  let price = product.salePrice || product.price;
   let image = product.thumbnail || product.images?.[0];
   let color = '', frameSize = '', sku = '';
 
