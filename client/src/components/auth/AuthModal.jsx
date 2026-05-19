@@ -117,10 +117,11 @@ export default function AuthModal() {
             {!isLogin && (
               <input
                 type="tel"
-                placeholder="Phone (optional)"
+                placeholder="Mobile Number"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors"
+                required
               />
             )}
 

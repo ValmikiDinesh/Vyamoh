@@ -69,7 +69,7 @@ export default function LoginPage() {
               </button>
             </div>
             {!isLogin && (
-              <input type="tel" placeholder="Phone (optional)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-field" />
+              <input type="tel" placeholder="Mobile Number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-field" required />
             )}
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 text-lg disabled:opacity-50">

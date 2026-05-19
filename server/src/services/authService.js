@@ -30,6 +30,9 @@ const setTokenCookies = (res, tokens) => {
 };
 
 const register = async ({ name, email, password, phone }) => {
+  if (!phone || !phone.trim()) {
+    throw new AppError('Mobile number is required', 400);
+  }
   const existing = await User.findOne({ email });
   if (existing) throw new AppError('Email already registered', 400);
 
