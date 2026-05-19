@@ -40,9 +40,9 @@ export default function Footer() {
         </div>
 
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-16">
           {/* Brand & Socials */}
-          <div className="col-span-2 md:col-span-1 lg:col-span-2">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <span className="text-2xl font-black tracking-widest text-black dark:text-white" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
             <p className="mt-4 text-xs leading-relaxed max-w-sm font-light text-neutral-500 dark:text-neutral-400">
               Premium sunglasses. Crafted with ultra-lightweight frames, polarized TAC lenses, and certified UV400 protection.
@@ -66,6 +66,29 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Contact Details & Address */}
+          <div>
+            <h4 className="text-xs uppercase font-extrabold tracking-widest text-black dark:text-white mb-4" style={{ fontFamily: 'Outfit' }}>Contact Us</h4>
+            <ul className="space-y-3 text-xs text-neutral-500 dark:text-neutral-400">
+              <li>
+                <span className="block font-bold text-[9px] uppercase tracking-wider text-black dark:text-white mb-0.5">Email</span>
+                <a href="mailto:support@vyamoh.com" className="hover:text-black dark:hover:text-white transition-colors">support@vyamoh.com</a>
+              </li>
+              <li>
+                <span className="block font-bold text-[9px] uppercase tracking-wider text-black dark:text-white mb-0.5">Call / WhatsApp</span>
+                <a href="tel:+919900011000" className="hover:text-black dark:hover:text-white transition-colors">+91 99000 11000</a>
+              </li>
+              <li>
+                <span className="block font-bold text-[9px] uppercase tracking-wider text-black dark:text-white mb-0.5">Studio Address</span>
+                <span className="block font-light leading-relaxed">
+                  VYAMOH Eyewear Studio<br />
+                  102, Design District, Sector 4<br />
+                  HSR Layout, Bengaluru, KA - 560102
+                </span>
+              </li>
+            </ul>
+          </div>
+
           {/* Company */}
           <div>
             <h4 className="text-xs uppercase font-extrabold tracking-widest text-black dark:text-white mb-4" style={{ fontFamily: 'Outfit' }}>Studio</h4>
@@ -76,13 +99,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Support & Legal */}
           <div>
-            <h4 className="text-xs uppercase font-extrabold tracking-widest text-black dark:text-white mb-4" style={{ fontFamily: 'Outfit' }}>Support</h4>
+            <h4 className="text-xs uppercase font-extrabold tracking-widest text-black dark:text-white mb-4" style={{ fontFamily: 'Outfit' }}>Support & Policies</h4>
             <ul className="space-y-2 text-xs">
-              {['Care & Maintenance', 'Returns & Exchanges', '1-Year Warranty', 'Secure Razorpay Payments'].map((item) => (
+              {['Care & Maintenance', 'Returns & Exchanges', '1-Year Warranty'].map((item) => (
                 <li key={item}><a href="#" className="text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white font-medium">{item}</a></li>
               ))}
+              <li><Link href="/privacy-policy" className="text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white font-medium">Privacy Policy</Link></li>
+              <li><Link href="/terms-conditions" className="text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white font-medium">Terms & Conditions</Link></li>
             </ul>
           </div>
         </div>
