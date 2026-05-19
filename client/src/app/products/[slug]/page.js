@@ -9,6 +9,7 @@ import useCartStore from '@/store/useCartStore';
 import useWishlistStore from '@/store/useWishlistStore';
 import useAuthStore from '@/store/useAuthStore';
 import ProductCard from '@/components/product/ProductCard';
+import ProductReviews from '@/components/product/ProductReviews';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
@@ -22,23 +23,24 @@ export default function ProductDetailPage() {
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { isAuthenticated, setShowAuthModal } = useAuthStore();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const { data } = await api.get(`/products/${slug}`);
-        setProduct(data.product);
-        // Fetch recommendations
-        if (data.product._id) {
-          api.get(`/products/${data.product._id}/recommendations`)
-            .then((r) => setRecommendations(r.data.recommendations || []))
-            .catch(() => {});
-        }
-      } catch {
-        setProduct(null);
-      } finally {
-        setLoading(false);
+  const fetchProduct = async () => {
+    try {
+      const { data } = await api.get(`/products/${slug}`);
+      setProduct(data.product);
+      // Fetch recommendations
+      if (data.product._id) {
+        api.get(`/products/${data.product._id}/recommendations`)
+          .then((r) => setRecommendations(r.data.recommendations || []))
+          .catch(() => {});
       }
-    };
+    } catch {
+      setProduct(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchProduct();
   }, [slug]);
 
@@ -117,7 +119,20 @@ export default function ProductDetailPage() {
         <div className="flex flex-col justify-between">
           <div>
             <span className="text-xs uppercase tracking-widest font-bold text-neutral-400">{product.brand}</span>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mt-1 mb-4" style={{ fontFamily: 'Outfit' }}>{product.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mt-1 mb-2" style={{ fontFamily: 'Outfit' }}>{product.name}</h1>
+            
+            {/* Star Rating Summary */}
+            {product.reviewCount > 0 && (
+              <div className="flex items-center gap-1.5 mb-4 select-none">
+                <div className="flex text-amber-400">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <HiStar key={i} size={15} className={i < Math.round(product.rating) ? 'fill-current' : 'text-neutral-200 dark:text-neutral-800'} />
+                  ))}
+                </div>
+                <span className="text-xs font-bold">{product.rating}</span>
+                <span className="text-xs text-neutral-400">({product.reviewCount} Reviews)</span>
+              </div>
+            )}
 
             {/* Price */}
             <div className="flex items-baseline gap-3 mb-6">
@@ -188,6 +203,9 @@ export default function ProductDetailPage() {
 
         </div>
       </div>
+
+      {/* Product Reviews */}
+      <ProductReviews productId={product._id} onReviewChanged={fetchProduct} />
 
       {/* Recommendations Carousel */}
       {recommendations.length > 0 && (
