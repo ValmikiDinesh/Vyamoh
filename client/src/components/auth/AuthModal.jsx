@@ -61,7 +61,7 @@ export default function AuthModal() {
           </button>
 
           <div className="text-center mb-8">
-            <span className="text-2xl font-bold tracking-wider" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
+            <span className="text-2xl font-bold tracking-wider gradient-text" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
             <h2 className="text-xl font-bold mt-4 text-black dark:text-white">
               {isLogin ? 'Sign In' : 'Create Account'}
             </h2>

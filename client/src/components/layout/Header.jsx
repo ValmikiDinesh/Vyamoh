@@ -81,7 +81,7 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-xl md:text-2xl font-bold tracking-widest uppercase" style={{ fontFamily: 'Outfit, sans-serif', color: 'var(--text-primary)' }}>VYAMOH</span>
+              <span className="text-xl md:text-2xl font-bold tracking-widest uppercase gradient-text" style={{ fontFamily: 'Outfit, sans-serif' }}>VYAMOH</span>
             </Link>
 
             {/* Navigation links */}
@@ -196,7 +196,7 @@ export default function Header() {
               className="fixed inset-y-0 left-0 w-80 z-[60] p-6 flex flex-col gap-4 bg-white dark:bg-neutral-950"
               style={{ borderRight: '1px solid var(--border-color)' }}>
               <div className="flex items-center justify-between">
-                <span className="text-xl font-bold tracking-widest" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
+                <span className="text-xl font-bold tracking-widest gradient-text" style={{ fontFamily: 'Outfit' }}>VYAMOH</span>
                 <button onClick={() => setMobileOpen(false)} className="btn-ghost p-2" aria-label="Close menu"><HiOutlineX size={22} /></button>
               </div>
               <nav className="flex flex-col gap-1 mt-6">
