@@ -3,16 +3,23 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiOutlineX, HiOutlineShoppingBag, HiBadgeCheck, HiOutlineEye } from 'react-icons/hi';
 import useCartStore from '@/store/useCartStore';
+import useAuthStore from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
 import { formatPrice } from '@/lib/utils';
 
 export default function QuickViewModal({ product, onClose }) {
   const [selectedImg, setSelectedImg] = useState(product?.thumbnail || product?.images?.[0] || '');
   const { addItem } = useCartStore();
+  const { isAuthenticated, setShowAuthModal } = useAuthStore();
 
   if (!product) return null;
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      onClose();
+      return;
+    }
     addItem({
       _id: product._id,
       name: product.name,

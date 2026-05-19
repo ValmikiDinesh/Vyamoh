@@ -13,7 +13,7 @@ import QuickViewModal from './QuickViewModal';
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCartStore();
   const { items: wishlistItems, toggleWishlist } = useWishlistStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, setShowAuthModal } = useAuthStore();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [showQuickView, setShowQuickView] = useState(false);
@@ -27,6 +27,10 @@ export default function ProductCard({ product, index = 0 }) {
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
     addItem({
       _id: product._id,
       name: product.name,
@@ -40,7 +44,10 @@ export default function ProductCard({ product, index = 0 }) {
   const handleWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isAuthenticated) { toast.error('Please login first'); return; }
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
     try { await toggleWishlist(product._id); } catch {}
   };
 

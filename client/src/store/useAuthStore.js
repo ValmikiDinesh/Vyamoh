@@ -5,8 +5,10 @@ const useAuthStore = create((set, get) => ({
   user: null,
   isAuthenticated: false,
   loading: true,
+  showAuthModal: false,
 
   setUser: (user) => set({ user, isAuthenticated: !!user, loading: false }),
+  setShowAuthModal: (showAuthModal) => set({ showAuthModal }),
 
   login: async (email, password) => {
     const { data } = await api.post('/auth/login', { email, password });

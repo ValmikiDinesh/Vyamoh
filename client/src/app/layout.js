@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AuthProvider from '@/components/providers/AuthProvider';
+import AuthModal from '@/components/auth/AuthModal';
 
 export const metadata = {
   title: 'Vyamoh — Premium Eyewear for Every Vibe',
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
             success: { iconTheme: { primary: '#e85d3a', secondary: '#fff' } },
           }} />
           <Header />
+          <AuthModal />
           <main className="flex-1 pt-[calc(4rem+28px)] md:pt-[calc(5rem+28px)]">
             {children}
           </main>

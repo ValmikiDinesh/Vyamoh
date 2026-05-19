@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import { formatPrice } from '@/lib/utils';
 import useCartStore from '@/store/useCartStore';
 import useWishlistStore from '@/store/useWishlistStore';
+import useAuthStore from '@/store/useAuthStore';
 import ProductCard from '@/components/product/ProductCard';
 import toast from 'react-hot-toast';
 
@@ -19,6 +20,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const { addItem } = useCartStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { isAuthenticated, setShowAuthModal } = useAuthStore();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -63,6 +65,10 @@ export default function ProductDetailPage() {
   const inWishlist = isInWishlist(product._id);
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
     addItem({
       _id: product._id,
       name: product.name,
@@ -71,6 +77,14 @@ export default function ProductDetailPage() {
       quantity,
       sku: product.sku
     });
+  };
+
+  const handleWishlistToggle = () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+    toggleWishlist(product._id);
   };
 
   return (
@@ -166,7 +180,7 @@ export default function ProductDetailPage() {
             <button onClick={handleAddToCart} className="flex-1 bg-black text-white dark:bg-white dark:text-black font-bold text-xs uppercase tracking-widest py-4.5 hover:opacity-90 transition-all flex items-center justify-center gap-2">
               <HiOutlineShoppingBag size={16} /> Add To Bag
             </button>
-            <button onClick={() => toggleWishlist(product._id)}
+            <button onClick={handleWishlistToggle}
               className="w-14 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
               {inWishlist ? <HiHeart size={20} className="text-rose-500" /> : <HiOutlineHeart size={20} />}
             </button>
