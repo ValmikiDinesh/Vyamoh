@@ -118,4 +118,49 @@ const refreshToken = async (token) => {
   return { user, tokens };
 };
 
-module.exports = { register, login, googleLogin, refreshToken, generateTokens, setTokenCookies };
+const forgotPassword = async (email) => {
+  const crypto = require('crypto');
+  const user = await User.findOne({ email });
+  if (!user) throw new AppError('No user found with that email address', 404);
+
+  if (user.authProvider === 'google') {
+    throw new AppError('This account uses Google Login. Please sign in with Google.', 400);
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  user.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  user.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+
+  await user.save();
+  return { user, resetToken };
+};
+
+const resetPassword = async (token, newPassword) => {
+  const crypto = require('crypto');
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) throw new AppError('Token is invalid or has expired', 400);
+
+  user.password = newPassword;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  user.refreshToken = null;
+  await user.save();
+
+  return user;
+};
+
+module.exports = { register, login, googleLogin, refreshToken, generateTokens, setTokenCookies, forgotPassword, resetPassword };

@@ -71,3 +71,18 @@ exports.deleteAddress = asyncHandler(async (req, res) => {
   await req.user.save();
   res.json({ success: true, addresses: req.user.addresses });
 });
+
+const { sendPasswordResetEmail } = require('../services/notification/emailService');
+
+exports.forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const { user, resetToken } = await authService.forgotPassword(email);
+  await sendPasswordResetEmail(user, resetToken);
+  res.json({ success: true, message: 'Password reset link sent to your email' });
+});
+
+exports.resetPassword = asyncHandler(async (req, res) => {
+  const { token, password } = req.body;
+  await authService.resetPassword(token, password);
+  res.json({ success: true, message: 'Password reset successful. You can now log in.' });
+});

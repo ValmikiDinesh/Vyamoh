@@ -37,4 +37,20 @@ const sendShippingNotification = async (order, user) => {
   return sendEmail({ to: user.email, subject: `Order Shipped: ${order.orderNumber}`, html });
 };
 
-module.exports = { sendEmail, sendOrderConfirmation, sendShippingNotification };
+const sendPasswordResetEmail = async (user, token) => {
+  const resetUrl = `${config.clientUrl}/reset-password?token=${token}`;
+  const html = `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;color:#1a1a1a;">
+    <h2 style="color:#e85d3a;margin-bottom:20px;">🔒 Reset Your Password</h2>
+    <p>Hi ${user.name},</p>
+    <p>We received a request to reset the password for your Vyamoh account. Click the button below to set a new password:</p>
+    <div style="margin:30px 0;text-align:center;">
+      <a href="${resetUrl}" style="background:#e85d3a;color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Reset Password</a>
+    </div>
+    <p style="color:#666666;font-size:12px;">This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.</p>
+    <hr style="border:none;border-top:1px solid #eeeeee;margin:20px 0;" />
+    <p style="color:#999999;font-size:12px;">Vyamoh Team</p>
+  </div>`;
+  return sendEmail({ to: user.email, subject: 'Reset your password - Vyamoh', html });
+};
+
+module.exports = { sendEmail, sendOrderConfirmation, sendShippingNotification, sendPasswordResetEmail };

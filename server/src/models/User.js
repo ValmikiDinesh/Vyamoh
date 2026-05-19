@@ -42,6 +42,8 @@ const userSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: true },
     isEmailVerified: { type: Boolean, default: false },
     refreshToken: { type: String, select: false },
+    passwordResetToken: { type: String, select: false },
+    passwordResetExpires: { type: Date, select: false },
 
     // Fraud tracking
     totalOrders: { type: Number, default: 0 },
