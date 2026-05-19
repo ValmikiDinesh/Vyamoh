@@ -21,7 +21,10 @@ export default function MediaUploader({ images = [], videos = [], onImagesChange
       });
       onImagesChange([...images, ...data.images]);
       toast.success(`${data.images.length} image(s) uploaded`);
-    } catch (err) { toast.error('Upload failed'); }
+    } catch (err) {
+      console.error('Image upload error:', err.response?.data || err.message || err);
+      toast.error('Upload failed');
+    }
     finally { setUploading(false); setProgress(0); }
   }, [images, onImagesChange]);
 
@@ -37,7 +40,10 @@ export default function MediaUploader({ images = [], videos = [], onImagesChange
       });
       onVideosChange([...videos, ...data.videos.map((v) => v.url)]);
       toast.success('Video uploaded');
-    } catch (err) { toast.error('Video upload failed'); }
+    } catch (err) {
+      console.error('Video upload error:', err.response?.data || err.message || err);
+      toast.error('Video upload failed');
+    }
     finally { setUploading(false); setProgress(0); }
   }, [videos, onVideosChange]);
 

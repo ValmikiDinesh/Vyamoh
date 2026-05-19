@@ -81,4 +81,4 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
-// Trigger nodemon reload for database config change
+// Trigger nodemon reload for database config change v2

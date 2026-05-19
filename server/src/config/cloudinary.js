@@ -21,7 +21,6 @@ if (isCloudinaryConfigured) {
     cloudinary,
     params: {
       folder: 'vyamoh/products',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
       transformation: [{ width: 1200, height: 1200, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' }],
     },
   });
@@ -32,7 +31,6 @@ if (isCloudinaryConfigured) {
     params: {
       folder: 'vyamoh/videos',
       resource_type: 'video',
-      allowed_formats: ['mp4', 'mov', 'webm', 'avi'],
     },
   });
 
