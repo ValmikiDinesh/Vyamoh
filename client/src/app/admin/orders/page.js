@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { formatPrice, formatDate, getStatusColor } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
-const statuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+const statuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'fraud'];
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);

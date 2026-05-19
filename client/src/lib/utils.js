@@ -22,6 +22,7 @@ export const getStatusColor = (status) => {
     pending: 'badge-warning', confirmed: 'badge-info', processing: 'badge-info',
     shipped: 'badge-info', out_for_delivery: 'badge-info', delivered: 'badge-success',
     cancelled: 'badge-danger', returned: 'badge-danger', refunded: 'badge-warning',
+    fraud: 'badge-danger',
   };
   return colors[status] || 'badge-info';
 };

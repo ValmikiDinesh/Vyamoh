@@ -28,6 +28,16 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
   if (trackingId) order.trackingId = trackingId;
   if (trackingUrl) order.trackingUrl = trackingUrl;
   if (status === 'delivered') { order.deliveredAt = new Date(); if (order.paymentMethod === 'cod') order.paymentStatus = 'cod_collected'; }
+  
+  if (status === 'fraud') {
+    const user = await User.findById(order.user);
+    if (user) {
+      user.isActive = false;
+      user.refreshToken = null;
+      await user.save();
+    }
+  }
+
   order.statusHistory.push({ status, note: note || `Status updated to ${status}`, updatedBy: req.user._id, timestamp: new Date() });
   await order.save();
   res.json({ success: true, order });
