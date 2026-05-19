@@ -24,14 +24,16 @@ export default function HeroSlider() {
     fetchBanners();
   }, []);
 
-  // Auto rotate slider every 6 seconds
+  // Auto rotate slider: every 6s for images; videos trigger nextSlide on ended.
   useEffect(() => {
     if (banners.length <= 1) return;
+    if (banners[current]?.video) return; // Wait for video onEnded event
+
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [banners]);
+  }, [banners, current]);
 
   if (loading) {
     return <div className="w-full h-[50vh] md:h-screen shimmer flex items-center justify-center bg-neutral-100 dark:bg-neutral-900" />;
@@ -52,7 +54,7 @@ export default function HeroSlider() {
             {/* Media: Video or Image */}
             <div className="absolute inset-0 w-full h-full">
               {banners[current].video ? (
-                <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                <video autoPlay muted playsInline className="w-full h-full object-cover" onEnded={nextSlide}>
                   <source src={banners[current].video} type="video/mp4" />
                 </video>
               ) : (
