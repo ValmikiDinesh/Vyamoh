@@ -135,8 +135,10 @@ exports.createProduct = asyncHandler(async (req, res) => {
 
 exports.updateProduct = asyncHandler(async (req, res) => {
   const sanitizedBody = sanitizeEmptyStrings(req.body);
-  const product = await Product.findByIdAndUpdate(req.params.id, sanitizedBody, { new: true, runValidators: true });
+  const product = await Product.findById(req.params.id);
   if (!product) throw new AppError('Product not found', 404);
+  product.set(sanitizedBody);
+  await product.save();
   res.json({ success: true, product });
 });
 
