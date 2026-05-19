@@ -63,8 +63,6 @@ export default function HeroSlider() {
                   <img src={banners[current].mobileImage ? banners[current].mobileImage.replace('w=640', 'ar=9:16&fit=crop&w=640&h=1140') : ''} alt={banners[current].title} className="block md:hidden w-full h-full object-cover opacity-50" />
                 </>
               )}
-              {/* Black Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
             </div>
 
             {/* Text content - Apple inspired minimal white layout */}
@@ -79,7 +77,7 @@ export default function HeroSlider() {
                   {banners[current].subtitle}
                 </motion.p>
                 <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
-                  <Link href={banners[current].ctaLink} className="inline-block bg-white text-black font-semibold px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-wider transition-all duration-300 hover:bg-neutral-200 active:scale-95 shadow-md">
+                  <Link href={banners[current].ctaLink} className="inline-block bg-white text-black font-semibold px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-[10px] sm:text-sm uppercase tracking-wider transition-all duration-300 hover:bg-neutral-200 active:scale-95">
                     {banners[current].ctaText}
                   </Link>
                 </motion.div>
