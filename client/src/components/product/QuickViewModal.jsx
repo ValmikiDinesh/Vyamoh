@@ -21,7 +21,6 @@ export default function QuickViewModal({ product, onClose }) {
       quantity: 1,
       sku: product.sku
     });
-    toast.success('Added to cart!');
     onClose();
   };
 

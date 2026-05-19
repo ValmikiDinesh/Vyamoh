@@ -71,7 +71,6 @@ export default function ProductDetailPage() {
       quantity,
       sku: product.sku
     });
-    toast.success('Added to bag!');
   };
 
   return (

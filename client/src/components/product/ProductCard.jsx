@@ -35,7 +35,6 @@ export default function ProductCard({ product, index = 0 }) {
       quantity: 1,
       sku: product.sku
     });
-    toast.success('Added to cart!');
   };
 
   const handleWishlist = async (e) => {
