@@ -12,13 +12,13 @@ import QuickViewModal from './QuickViewModal';
 
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCartStore();
-  const { items: wishlistItems, toggleWishlist } = useWishlistStore();
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { isAuthenticated, setShowAuthModal } = useAuthStore();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [showQuickView, setShowQuickView] = useState(false);
 
-  const isWishlisted = wishlistItems?.some((item) => item.product === product._id || item.product?._id === product._id);
+  const isWishlisted = isInWishlist(product._id);
   const img1 = product.thumbnail || product.images?.[0];
   const img2 = product.images?.[1] || img1;
   const hasVideo = product.videos && product.videos.length > 0;
