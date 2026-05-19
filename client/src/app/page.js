@@ -241,16 +241,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 9. Newsletter Subscription */}
-      <section className="max-w-4xl mx-auto px-6 py-24 text-center">
-        <span className="text-xs uppercase tracking-widest font-bold text-neutral-400">Join the Circle</span>
-        <h2 className="text-3xl font-extrabold tracking-tight mt-1 mb-4" style={{ fontFamily: 'Outfit' }}>Unlock 10% Off Your First Pair</h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-md mx-auto mb-8 font-light">Subscribe to drops, private sales, and seasonal collection releases.</p>
-        <form onSubmit={(e) => { e.preventDefault(); toast.success('Subscribed successfully!'); }} className="flex max-w-md mx-auto gap-2">
-          <input type="email" placeholder="Enter your email" className="input-field rounded-none border-b border-t-0 border-x-0 focus:ring-0 focus:border-black dark:focus:border-white" required />
-          <button type="submit" className="bg-black text-white dark:bg-white dark:text-black font-semibold text-xs uppercase tracking-widest px-8">Subscribe</button>
-        </form>
-      </section>
+
 
     </div>
   );
