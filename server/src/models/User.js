@@ -25,13 +25,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, minlength: 6, select: false },
-    phone: {
-      type: String,
-      required: function () {
-        return this.authProvider === 'local';
-      },
-      trim: true,
-    },
+    phone: { type: String, trim: true },
     avatar: String,
     role: {
       type: String,
