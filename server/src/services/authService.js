@@ -19,13 +19,13 @@ const setTokenCookies = (res, tokens) => {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: 15 * 60 * 1000, // 15 min
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
   });
   res.cookie('refreshToken', tokens.refreshToken, {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 };
 

@@ -64,9 +64,12 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         isRefreshing = false;
-        localStorage.removeItem('accessToken');
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+        const isAuthError = refreshError.response?.status === 400 || refreshError.response?.status === 401 || refreshError.response?.status === 403;
+        if (isAuthError) {
+          localStorage.removeItem('accessToken');
+          if (typeof window !== 'undefined') {
+            window.location.href = '/login';
+          }
         }
         return Promise.reject(refreshError);
       }
