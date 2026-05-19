@@ -9,14 +9,23 @@ import api from '@/lib/api';
 import { formatPrice, formatDate, getStatusColor } from '@/lib/utils';
 
 export default function AccountPage() {
-  const { user, logout, isAuthenticated } = useAuthStore();
+  const { user, logout, isAuthenticated, loading } = useAuthStore();
   const router = useRouter();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    if (loading) return;
     if (!isAuthenticated) { router.push('/login'); return; }
     api.get('/orders/my-orders?limit=5').then((r) => setOrders(r.data.orders || [])).catch(() => {});
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loading]);
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 

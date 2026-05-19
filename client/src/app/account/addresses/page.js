@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 
 export default function AddressesPage() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, loading } = useAuthStore();
   const router = useRouter();
   const [addresses, setAddresses] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +29,7 @@ export default function AddressesPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (loading) return;
     if (!isAuthenticated) {
       router.push('/login');
       return;
@@ -36,7 +37,15 @@ export default function AddressesPage() {
     if (user) {
       setAddresses(user.addresses || []);
     }
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, loading]);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black dark:border-white"></div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 
