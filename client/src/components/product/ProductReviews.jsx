@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import useAuthStore from '@/store/useAuthStore';
 import toast from 'react-hot-toast';
+import MediaUploader from '@/components/admin/MediaUploader';
 
 export default function ProductReviews({ productId, onReviewChanged }) {
   const { user, isAuthenticated, setShowAuthModal } = useAuthStore();
@@ -18,6 +19,8 @@ export default function ProductReviews({ productId, onReviewChanged }) {
   const [hoverRating, setHoverRating] = useState(0);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [images, setImages] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   // Edit states
@@ -26,6 +29,8 @@ export default function ProductReviews({ productId, onReviewChanged }) {
   const [editHoverRating, setEditHoverRating] = useState(0);
   const [editTitle, setEditTitle] = useState('');
   const [editText, setEditText] = useState('');
+  const [editImages, setEditImages] = useState([]);
+  const [editVideos, setEditVideos] = useState([]);
   const [editSubmitting, setEditSubmitting] = useState(false);
 
   const fetchReviews = async () => {
@@ -78,11 +83,13 @@ export default function ProductReviews({ productId, onReviewChanged }) {
     }
     try {
       setSubmitting(true);
-      await api.post(`/reviews/product/${productId}`, { rating, title, text });
+      await api.post(`/reviews/product/${productId}`, { rating, title, text, images, videos });
       toast.success('Review submitted successfully!');
       setTitle('');
       setText('');
       setRating(5);
+      setImages([]);
+      setVideos([]);
       setShowForm(false);
       fetchReviews();
       if (onReviewChanged) onReviewChanged();
@@ -98,6 +105,8 @@ export default function ProductReviews({ productId, onReviewChanged }) {
     setEditRating(review.rating);
     setEditTitle(review.title || '');
     setEditText(review.text || '');
+    setEditImages(review.images || []);
+    setEditVideos(review.videos || []);
   };
 
   const handleUpdate = async (e) => {
@@ -108,7 +117,13 @@ export default function ProductReviews({ productId, onReviewChanged }) {
     }
     try {
       setEditSubmitting(true);
-      await api.put(`/reviews/${editingId}`, { rating: editRating, title: editTitle, text: editText });
+      await api.put(`/reviews/${editingId}`, { 
+        rating: editRating, 
+        title: editTitle, 
+        text: editText,
+        images: editImages,
+        videos: editVideos
+      });
       toast.success('Review updated successfully!');
       setEditingId(null);
       fetchReviews();
@@ -233,6 +248,17 @@ export default function ProductReviews({ productId, onReviewChanged }) {
                 />
               </div>
 
+              {/* Media Uploader */}
+              <div className="border border-neutral-100 dark:border-neutral-900 p-4 rounded-xl">
+                <span className="block text-xs uppercase font-extrabold text-neutral-400 mb-3">Add Photos or Videos</span>
+                <MediaUploader
+                  images={images}
+                  videos={videos}
+                  onImagesChange={setImages}
+                  onVideosChange={setVideos}
+                />
+              </div>
+
               {/* Actions */}
               <div className="flex gap-3 pt-2">
                 <button
@@ -316,6 +342,17 @@ export default function ProductReviews({ productId, onReviewChanged }) {
                       rows={3}
                       required
                       className="w-full bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-850 px-3 py-2 text-sm focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Edit Media Uploader */}
+                  <div className="border border-neutral-100 dark:border-neutral-900 p-4 rounded-xl mb-4">
+                    <span className="block text-xs uppercase font-extrabold text-neutral-400 mb-3">Edit Photos or Videos</span>
+                    <MediaUploader
+                      images={editImages}
+                      videos={editVideos}
+                      onImagesChange={setEditImages}
+                      onVideosChange={setEditVideos}
                     />
                   </div>
                   <div className="flex gap-2">

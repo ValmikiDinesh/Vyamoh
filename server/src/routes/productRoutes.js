@@ -19,8 +19,8 @@ router.post('/', authenticate, authorize('admin', 'superadmin'), product.createP
 router.put('/:id', authenticate, authorize('admin', 'superadmin'), product.updateProduct);
 router.delete('/:id', authenticate, authorize('admin', 'superadmin'), product.deleteProduct);
 router.patch('/:id/toggle', authenticate, authorize('admin', 'superadmin'), product.toggleProduct);
-router.post('/upload-images', authenticate, authorize('admin', 'superadmin'), uploadImages.array('images', 10), product.uploadImages);
-router.post('/upload-videos', authenticate, authorize('admin', 'superadmin'), uploadVideos.array('videos', 5), product.uploadVideos);
+router.post('/upload-images', authenticate, uploadImages.array('images', 10), product.uploadImages);
+router.post('/upload-videos', authenticate, uploadVideos.array('videos', 5), product.uploadVideos);
 router.post('/delete-media', authenticate, authorize('admin', 'superadmin'), product.deleteMedia);
 router.post('/bulk-upload', authenticate, authorize('admin', 'superadmin'), memoryUpload.single('file'), product.bulkUpload);
 router.post('/:id/ai-content', authenticate, authorize('admin', 'superadmin'), product.generateAIContent);
